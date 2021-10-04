@@ -93,7 +93,7 @@ Modify Notifications:
 - php artisan vendor:publish --tag=laravel-notifications
 - php artisan vendor:publish --tag=laravel-mail
 
-Run Server> 
+Run Server: 
 - php artisan serve
 
 ## License

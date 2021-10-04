@@ -17,4 +17,11 @@ Route::get('/', function () {
 
 Auth::routes();
 
+Route::get('/', 'HomeController@index')->name('home');
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('/clients','ClientsController@index')->name('clients');
+Route::get('/clients/index','ClientsController@index')->name('clients');
+Route::post('/clients/create','ClientsController@create');
+Route::post('/clients/delete','ClientsController@delete');
+Route::get('/clients/id/{id}', 'ClientsController@getClientById');
