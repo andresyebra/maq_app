@@ -51,15 +51,15 @@
                             <div class="form-group">
                                 <label class="col-md-2 control-label" for="archivo_cliente">Archivo Cliente</label>
                                 <div class="col-md-4">
-                                    <input id="archivo_cliente" name="archivo_cliente" type="text"
-                                           placeholder="Archivo Cliente" class="form-control input-md"
-                                           value="{{ old('archivo_cliente')}}">
+                                   <textarea style="resize: none;" id="archivo_cliente" name="archivo_cliente" type="text"
+                                             placeholder="Archivo Cliente" class="form-control input-md"
+                                             value="{{ old('archivo_cliente')}}" rows="4"></textarea>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-md-2 control-label"></label>
                                 <div class="col-md-8">
-                                    <button id="insert" name="insert" class="btn btn-primary" value="insert">Guardar
+                                    <button id="insert" name="insert" class="btn btn-primary">Guardar
                                     </button>
                                     <button id="discard" type="button" name="discard" class="btn btn-primary">Limpiar
                                     </button>
@@ -111,7 +111,7 @@
                              <tbody>
                              @if(count($clients) > 0)
                                  @foreach ($clients as $client => $value)
-                                     <tr>
+                                     <tr id="row_client_{{$value->id}}">
                                          <td>{{$value->id}}</td>
                                          <td>{{$value->clave}}</td>
                                          <td>{{$value->nombre}}</td>
@@ -125,7 +125,7 @@
                                               </button>
                                               <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                                                 <li><a class="set_delete_client dropdown-item" data-toggle="modal" data-id="{{$value->id}}" data-name="{{$value->nombre}}" href="#deleteModal">Eliminar</a></li>
-                                                <li><a class="dropdown-item" href="#">Modificar</a></li>
+                                                <li><a class="set_edit_client dropdown-item" data-toggle="modal" data-id="{{$value->id}}" href="#editModal">Modificar</a></li>
                                               </ul>
                                             </div>
 
@@ -161,13 +161,93 @@
            <strong>Nombre: </strong><p id="name_client"></p>
          </div>
          <div class="modal-footer">
-           <button type="button" class="btn btn-secondary" data-dismiss="modal" value="insert">Cerrar</button>
+           <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
            <button type="submit" class="btn btn-danger delete_client" name="delete_client" id="delete_client">Eliminar</button>
          </div>
          </form>
        </div>
      </div>
    </div>
+
+     <!-- Modal -->
+   <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+     <div class="modal-dialog">
+       <div class="modal-content">
+         <div class="modal-header">
+           <h5 class="modal-title" id="deleteModalLabel">Modificar Cliente</h5>
+         </div>
+         <form id="update_form" class="form-horizontal" method="POST" action="{{ url('/clients/update')}}">
+        <div class="modal-body">
+          {!! csrf_field() !!}
+
+           <input hidden id="id_edit_client" ></input>
+
+           <div class="form-group">
+               <label class="col-md-3 control-label" for="edit_clave_cliente">Clave</label>
+               <div class="col-md-7">
+                   <input id="edit_clave_cliente" name="edit_clave_cliente" type="text"
+                          placeholder="Clave" class="form-control input-md" value="{{ old('clave_cliente')}}">
+               </div>
+           </div>
+
+           <div class="form-group">
+                <label class="col-md-3 control-label" for="edit_nombre_cliente">Nombre</label>
+                <div class="col-md-7">
+                   <input id="edit_nombre_cliente" name="edit_nombre_cliente" type="text"
+                          placeholder="Nombre Cliente" class="form-control input-md" value="{{ old('nombre_cliente')}}">
+                </div>
+           </div>
+
+           <div class="form-group">
+               <label class="col-md-3 control-label" for="edit_telefono_cliente">Teléfono</label>
+               <div class="col-md-7">
+                   <input id="edit_telefono_cliente" name="edit_telefono_cliente" type="text"
+                      placeholder="Teléfono Cliente" class="form-control input-md" value="{{ old('telefono_cliente')}}">
+               </div>
+           </div>
+
+           <div class="form-group">
+               <label class="col-md-3 control-label" for="edit_correo_cliente">E-mail</label>
+               <div class="col-md-7">
+                   <input id="edit_correo_cliente" name="edit_correo_cliente" type="email"
+                          placeholder="Correo Cliente" class="form-control input-md" value="{{ old('correo_cliente')}}">
+               </div>
+           </div>
+
+           <div class="form-group">
+               <label class="col-md-3 control-label" for="edit_direccion_cliente">Dirección</label>
+               <div class="col-md-7">
+               <input id="edit_direccion_cliente" name="edit_direccion_cliente" type="text"
+               placeholder="Dirección Cliente" class="form-control input-md"
+               value="{{ old('direccion_cliente')}}">
+               </div>
+           </div>
+
+           <div class="form-group">
+               <label class="col-md-3 control-label" for="edit_archivo_cliente">Archivo Cliente</label>
+               <div class="col-md-7">
+                   <textarea style="resize: none;" id="edit_archivo_cliente" name="edit_archivo_cliente" type="text"
+                       placeholder="Archivo Cliente" class="form-control input-md"
+                       value="{{ old('archivo_cliente')}}" rows="4"></textarea>
+               </div>
+           </div>
+
+           <div class="form-group">
+               <label class="col-md-3 control-label"></label>
+               <div class="col-md-7" id="alert_edit"></div>
+           </div>
+
+         </div>
+         <div class="modal-footer">
+           <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+           <button type="submit" class="btn btn-primary edit_client" name="edit_client" id="edit_client">Guardar</button>
+         </div>
+         </form>
+       </div>
+     </div>
+   </div>
+
+<input hidden id="GetDataClientsById" value="{{ url('/clients/id/') }}"></input>
 @endsection
 
 @section('scripts')

@@ -24,4 +24,5 @@ Route::get('/clients','ClientsController@index')->name('clients');
 Route::get('/clients/index','ClientsController@index')->name('clients');
 Route::post('/clients/create','ClientsController@create');
 Route::post('/clients/delete','ClientsController@delete');
+Route::post('/clients/update','ClientsController@update');
 Route::get('/clients/id/{id}', 'ClientsController@getClientById');

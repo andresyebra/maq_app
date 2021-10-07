@@ -28,7 +28,6 @@ class ClientsController extends Controller
 
         public function create()
         {
-            $id = Input::get('empresas_id');
             $data = [
                 'Clave' => Input::get('clave_cliente'),
                 'Nombre' => Input::get('nombre_cliente'),
@@ -43,37 +42,58 @@ class ClientsController extends Controller
                 'integer' => 'El campo :attribute debe ser entero.',
             ];
 
-            if (Input::get('insert')) {
+            $validator = Validator::make($data,
+                [   'Clave' => 'required|string|max:100',
+                    'Nombre' => 'required|string|max:100',
+                    'Telefono' => 'required|string|max:100',
+                    'Direccion' => 'required|string|max:100',
+                    'Correo' => 'required|string|max:100',
+                    'Archivo' => 'required|string|max:100'
+                ],
+                    $messages);
 
-                $validator = Validator::make($data,
-                    [
-                        'Clave' => 'required|string|max:100',
-                        'Nombre' => 'required|string|max:100',
-                        'Telefono' => 'required|string|max:100',
-                        'Direccion' => 'required|string|max:100',
-                        'Correo' => 'required|string|max:100',
-                        'Archivo' => 'required|string|max:100'
-                    ],
-                    $messages
-                );
-
-                if ($validator->fails()) {
-                    return redirect('clients/index')
-                        ->withErrors($validator)
-                        ->withInput();
-                }
-
-                if (!empty($id)) {
-                    Client::updateClient($id, $data);
-                    return redirect('clients/index')->with('status', 'Cliente Actualisado Exitosamente!');
-                } else {
-                    Client::createClient($data);
-                    return redirect('clients/index')->with('status', 'Cliente Creado Exitosamente!');
-                }
-
+            if ($validator->fails()) {
+                return redirect('clients/index')
+                    ->withErrors($validator)
+                    ->withInput();
             }
 
-            return view('clients.index');
+            Client::createClient($data);
+            return redirect('clients/index')->with('status', 'Cliente Creado Exitosamente!');
+        }
+
+        public function update()
+        {
+            $data = [
+                'id' => Input::get('id_edit_client'),
+                'Clave' => Input::get('edit_clave_cliente'),
+                'Nombre' => Input::get('edit_nombre_cliente'),
+                'Telefono' => Input::get('edit_telefono_cliente'),
+                'Direccion' => Input::get('edit_direccion_cliente'),
+                'Correo' => Input::get('edit_correo_cliente'),
+                'Archivo' => Input::get('edit_archivo_cliente')
+            ];
+            $messages = [
+                'required' => 'El campo :attribute es requerido.',
+                'max' => 'El campo :attribute maximo :max caracteres.',
+                'integer' => 'El campo :attribute debe ser entero.'
+            ];
+
+            $validator = Validator::make($data,
+                [   'Clave' => 'required|string|max:100',
+                    'Nombre' => 'required|string|max:100',
+                    'Telefono' => 'required|string|max:100',
+                    'Direccion' => 'required|string|max:100',
+                    'Correo' => 'required|string|max:100',
+                    'Archivo' => 'required|string|max:100'
+                ], $messages);
+
+            if ($validator->fails()) {
+                return response()->json(['errors'=>$validator->errors()->all()]);
+            }
+
+            Client::updateClient($data['id'], $data);
+            return response()->json(['status'=> 'Cliente Actualisado Exitosamente!']);
         }
 
         public function delete()

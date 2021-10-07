@@ -41,9 +41,12 @@ class Client extends Model
     {
         $updated = DB::table('clients')->where('id', $id)
             ->update([
-                'clave' => $data['Empresa'],
-                'descripcion' => $data['Descripcion'],
-                'area' => $data['Area']
+                'clave' => $data['Clave'],
+                'nombre' => $data['Nombre'],
+                'telefono' => $data['Telefono'],
+                'direccion' => $data['Direccion'],
+                'correo' => $data['Correo'],
+                'archivo_clientes' => $data['Archivo']
             ]);
 
         return $updated;
